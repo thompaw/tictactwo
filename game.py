@@ -69,4 +69,8 @@ class ticTacGame:
         self.gboard[move[0]][move[1]] = 'X'
 
     def aiTurn(self):
-        arty = ai.arty(self.gboard)
+        arty = ai.Arty(self.gboard)
+
+    
+    def playGame():
+        pass
