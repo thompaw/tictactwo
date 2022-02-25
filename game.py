@@ -1,4 +1,5 @@
 import ai
+import random
 
 class gameBoard:
     def __init__(self, boardin=[['+', '+', '+'], ['+', '+', '+'], ['+', '+', '+']]):
@@ -71,6 +72,15 @@ class ticTacGame:
     def aiTurn(self):
         arty = ai.Arty(self.gboard)
 
-    
-    def playGame():
-        pass
+    def playGame(self):
+        gameWon = False
+        randx = random.randint(0, 2)
+        randy = random.randint(0, 2)
+        self.gboard[randx, randy] = 'X'
+        while not gameWon:
+            self.gboard.displayBoard()
+            self.playerTurn()
+            self.aiTurn()
+            gameWon = self.gboard.checkWin()
+
+
