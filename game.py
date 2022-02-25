@@ -26,7 +26,6 @@ class gameBoard:
                 print('-----')
     
     def checkWin(self, mark):
-        check = mark
         # Check on x axis
         count = 0
         for y in range(3):
@@ -34,7 +33,7 @@ class gameBoard:
                 if self.board[y][x] == mark:
                     count += 1
         if count == 3:
-            return True
+            return mark
         # check on y axis
         count = 0
         for y in range(3):
@@ -42,22 +41,22 @@ class gameBoard:
                 if self.board[x][y] == mark:
                     count += 1
         if count == 3:
-            return True
+            return mark
         # check diagonals (front/rear)
         count = 0
         for i in range(3):
             if self.board[i][i] == mark:
                 count += 1
         if count == 3:
-            return True
+            return mark
         count = 0
         for i in range(2, 0, -1):
             if self.board[i][i] == mark:
                 count += 1
         if count == 3:
-            return True
+            return mark
 
-        return False
+        return 'N'
 
 
 class ticTacGame:
@@ -67,7 +66,7 @@ class ticTacGame:
 
     def playerTurn(self):
         move = input("give position")
-        self.gboard[move[0]][move[1]] = 'X'
+        self.gboard[move[0]][move[1]] = 'O'
 
     def aiTurn(self):
         arty = ai.Arty(self.gboard)
@@ -81,6 +80,10 @@ class ticTacGame:
             self.gboard.displayBoard()
             self.playerTurn()
             self.aiTurn()
-            gameWon = self.gboard.checkWin()
+            res = self.gboard.checkWin()
+            if res != 'N':
+                gameWon = True
+                print(f'{res} Won !')
+                break
 
 
