@@ -67,48 +67,62 @@ class gameBoard:
 
 class Arty:
     def __init__(self, board):
-        self.b = board
+        self.board = board
+        self.b = self.board.board
 
-    def scanPotentialWins(self, mark):
-        # rows
-        moveDict = {}
-        for x in range(3):
-            for y in range(3):
-                if self.b[x][y] != mark:
-                    moveDict[(x, y)] += 1
-                else: 
-                    moveDict[(x, y)] = 0
-        # columns
-        for y in range(3):
+    def scanPotentialWins(self):
+        openDict = {}
+        takenDict = {'X': {}, 'O': {}}
+        for mark in symbollist:
+            # rows
             for x in range(3):
-                if self.b[x][y] != mark:
-                    moveDict[(x, y)] += 1
+                for y in range(3):
+                    spot = self.b[x][y]
+                    if spot != '+':
+                        if spot != mark:
+                            takenDict[mark][(x, y)] += 1
+                    else: 
+                        openDict[(x, y)] = 1
+            # cols
+            for y in range(3):
+                for x in range(3):
+                    spot = self.b[x][y]
+                    if spot != '+':
+                        if spot != mark:
+                            takenDict[mark][(x, y)] += 1
+                    else: 
+                        openDict[(x, y)] = 1
+            # front diagonal
+            for d in range(3):
+                spot = self.b[d][d]
+                if spot != '+':
+                    if spot != mark:
+                        takenDict[mark][(d, d)] += 1
                 else: 
-                    moveDict[(x, y)] = 0
-        # front diagonals
-        for d in range(3):
-            if self.b[d][d] != mark:
-                moveDict[(d, d)] += 1
-            else:
-                moveDict[(d, d)] = 0
-        # rear diagonals
-        for d in range(2, 0, -1):
-            if self.b[d][d] != mark:
-                moveDict[(d, d)] += 1
-            else:
-                moveDict[(d, d)] = 0
-        return moveDict
+                    openDict[(d, d)] = 1 
+            # rear diagonal
+            for rd in range(2, 0, -1):
+                spot = self.b[rd][rd]
+                if spot != '+':
+                    if spot != mark:
+                        takenDict[mark][(rd, rd)] += 1
+                else: 
+                    openDict[(rd, rd)] = 1
+
+        return openDict, takenDict
+
 
     def setUp(self):
         pass
 
-    def nextMove(self):
-        pass
-
     def artyMove(self):
         # this is the culmination, where the ai picks a spot
-        xmoveDict = self.scanPotentialWins('X')
-        omoveDict = self.scanPotentialWins('O')
+        # 1. scan for potential wins and shut down/win where possible
+        openSpaces, takenspaces = self.scanPotentialWins()
+        print(openSpaces)
+        print(takenspaces)
+        
+        
 
 
 class ticTacGame:
@@ -119,8 +133,8 @@ class ticTacGame:
         truemove = False
         while not truemove:
             move = input("give position")
-            playerx = int(move[0])
-            playery = int(move[1])
+            playerx = int(move[0]) - 1
+            playery = int(move[1]) - 1
             if self.gboard.board[playerx][playery] == 'X':
                 print('You cannot move on top of arty.')
             elif self.gboard.board[playerx][playery] == 'O':
@@ -132,6 +146,7 @@ class ticTacGame:
 
     def aiTurn(self):
         arty = Arty(self.gboard)
+        arty.artyMove()
 
     def playGame(self):
         gameWon = False
