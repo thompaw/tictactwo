@@ -1,10 +1,10 @@
 import random
 
 
-symbollist = ['X', 'O']
-blankboard = [['+', '+', '+'], 
-              ['+', '+', '+'], 
-              ['+', '+', '+']]
+symbol_list = ['X', 'O']
+blank_template = [['+', '+', '+'], 
+                  ['+', '+', '+'], 
+                  ['+', '+', '+']]
 
 
 def dictToBoard(indict, mark=None):
@@ -13,26 +13,21 @@ def dictToBoard(indict, mark=None):
                 [0, 0, 0]]
     # check if open or taken dict
     if mark == None:
-        for key in indict[mark].keys():
+        for key in indict.keys():
             xcoord = int(str(key)[0])
             ycoord = int(str(key)[1])
             endboard[xcoord][ycoord] += 1
     else: 
-        for key in indict.keys():
+        for key in indict[mark].keys():
             xcoord = int(str(key)[0])
             ycoord = int(str(key)[1])
             endboard[xcoord][ycoord] += 1
     return endboard
 
 class gameBoard:
-    def __init__(self, boardin=blankboard):
+    def __init__(self, boardin=blank_template):
         # constructor for class, holds board and makes new game if none are inputted
         self.board = boardin
-
-    def newBoard(self):
-        # funcion to return a newboard to start a new game. might be inefficient
-        newb = gameBoard(boardin=blankboard)
-        return newb
 
     def displayBoard(self):
         # iterate through one row at a time
@@ -49,7 +44,7 @@ class gameBoard:
                 print('-----')
     
     def checkWin(self):
-        for mark in symbollist:
+        for mark in symbol_list:
             # Check on x axis
             count = 0
             for y in range(3):
@@ -89,45 +84,7 @@ class Arty:
         self.b = self.board.board
 
     def scanPotentialWins(self):
-        openDict = {}
-        takenDict = {'X': {}, 'O': {}}
-        for mark in symbollist:
-            # rows
-            for x in range(3):
-                for y in range(3):
-                    spot = self.b[x][y]
-                    if spot != '+':
-                        if spot != mark:
-                            takenDict[mark][(x, y)] += 1
-                    else: 
-                        openDict[(x, y)] = 1
-            # cols
-            for y in range(3):
-                for x in range(3):
-                    spot = self.b[x][y]
-                    if spot != '+':
-                        if spot != mark:
-                            takenDict[mark][(x, y)] += 1
-                    else: 
-                        openDict[(x, y)] = 1
-            # front diagonal
-            for d in range(3):
-                spot = self.b[d][d]
-                if spot != '+':
-                    if spot != mark:
-                        takenDict[mark][(d, d)] += 1
-                else: 
-                    openDict[(d, d)] = 1 
-            # rear diagonal
-            for rd in range(2, 0, -1):
-                spot = self.b[rd][rd]
-                if spot != '+':
-                    if spot != mark:
-                        takenDict[mark][(rd, rd)] += 1
-                else: 
-                    openDict[(rd, rd)] = 1
-
-        return openDict, takenDict
+        pass
 
 
     def setUp(self):
@@ -136,9 +93,8 @@ class Arty:
     def artyMove(self):
         # this is the culmination, where the ai picks a spot
         # 1. scan for potential wins and shut down/win where possible
-        openSpaces, takenspaces = self.scanPotentialWins()
-        openboard = dictToBoard(openSpaces)
-        takenboard = dictToBoard(takenspaces)
+        pass  
+
         
         
         
@@ -146,7 +102,7 @@ class Arty:
 
 class ticTacGame:
     def __init__(self):
-        self.gboard = gameBoard().newBoard()
+        self.gboard = gameBoard()
 
     def playerTurn(self):
         truemove = False
