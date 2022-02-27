@@ -2,18 +2,36 @@ import random
 
 
 symbollist = ['X', 'O']
-startboard = [['+', '+', '+'], 
+blankboard = [['+', '+', '+'], 
               ['+', '+', '+'], 
               ['+', '+', '+']]
 
+
+def dictToBoard(indict, mark=None):
+    endboard = [[0, 0, 0], 
+                [0, 0, 0], 
+                [0, 0, 0]]
+    # check if open or taken dict
+    if mark == None:
+        for key in indict[mark].keys():
+            xcoord = int(str(key)[0])
+            ycoord = int(str(key)[1])
+            endboard[xcoord][ycoord] += 1
+    else: 
+        for key in indict.keys():
+            xcoord = int(str(key)[0])
+            ycoord = int(str(key)[1])
+            endboard[xcoord][ycoord] += 1
+    return endboard
+
 class gameBoard:
-    def __init__(self, boardin=startboard):
+    def __init__(self, boardin=blankboard):
         # constructor for class, holds board and makes new game if none are inputted
         self.board = boardin
 
     def newBoard(self):
         # funcion to return a newboard to start a new game. might be inefficient
-        newb = gameBoard(boardin=startboard)
+        newb = gameBoard(boardin=blankboard)
         return newb
 
     def displayBoard(self):
@@ -119,8 +137,9 @@ class Arty:
         # this is the culmination, where the ai picks a spot
         # 1. scan for potential wins and shut down/win where possible
         openSpaces, takenspaces = self.scanPotentialWins()
-        print(openSpaces)
-        print(takenspaces)
+        openboard = dictToBoard(openSpaces)
+        takenboard = dictToBoard(takenspaces)
+        
         
         
 
