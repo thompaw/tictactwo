@@ -82,22 +82,75 @@ class Arty:
     def __init__(self, board):
         self.board = board
         self.b = self.board.board
+    
+    def scanWins(self):
+        for mark in symbol_list:
+            # Check on x axis
+            count = 0
+            mini_list = []
+            for y in range(3):
+                for x in range(3):
+                    if self.b[y][x] == mark:
+                        count += 1
+                    else: 
+                        index = str(x) + str(y)
+                        mini_list.append(index)
+            if count > 1:
+                return mini_list
+            # check on y axis
+            count = 0
+            for y in range(3):
+                for x in range(3):
+                    if self.b[x][y] == mark:
+                        count += 1
+                    else: 
+                        index = str(x) + str(y)
+                        mini_list.append(index)
+            if count > 1:
+                return mini_list
+            # check diagonals front 
+            count = 0
+            for i in range(3):
+                if self.b[i][i] == mark:
+                    count += 1
+                else: 
+                    index = str(i) + str(i)
+                    mini_list.append(index)
+            if count == 3:
+                return mini_list
+            # check diagonals rear
+            count = 0
+            for i in range(2, 0, -1):
+                if self.b[i][i] == mark:
+                    count += 1
+                else: 
+                    index = str(i) + str(i)
+                    mini_list.append(index)
+            if count > 1:
+                return mini_list
 
-    def scanPotentialWins(self):
-        pass
-
-
-    def setUp(self):
-        pass
+        return None
+    
+    def randMove(self):
+        open = False
+        while not open:
+            randx = random.randint(0, 2)
+            randy = random.randint(0, 2)
+            if self.b[randx][randy] == '+':
+                open = True
+                return randx, randy
+            
 
     def artyMove(self):
         # this is the culmination, where the ai picks a spot
         # 1. scan for potential wins and shut down/win where possible
-        pass  
-
-        
-        
-        
+        next_place = self.scanWins()
+        if next_place is not None:
+            x = int(next_place[0])
+            y = int(next_place[1])
+            return x, y
+        else:
+            return self.randMove()
 
 
 class ticTacGame:
@@ -121,7 +174,7 @@ class ticTacGame:
 
     def aiTurn(self):
         arty = Arty(self.gboard)
-        arty.artyMove()
+        artyx, artyy = arty.artyMove()
 
     def playGame(self):
         gameWon = False
