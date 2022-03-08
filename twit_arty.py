@@ -24,6 +24,18 @@ def dictToBoard(indict, mark=None):
             endboard[xcoord][ycoord] += 1
     return endboard
 
+
+def make_key(tuplein):
+    strkey = str(tuplein[0]) + str(tuplein[1])
+    return strkey
+
+def extract_key(listin):
+    item = listin[0]
+    keyx = int(str(item)[0])
+    keyy = int(str(item)[1])
+    return keyx, keyy
+
+
 class gameBoard:
     def __init__(self, boardin=blank_template):
         # constructor for class, holds board and makes new game if none are inputted
@@ -74,7 +86,6 @@ class gameBoard:
                     count += 1
             if count == 3:
                 return mark
-
         return 'N'
 
 
@@ -84,10 +95,12 @@ class Arty:
         self.b = self.board.board
     
     def scanWins(self):
+        count = 0
+        mini_list = []
         for mark in symbol_list:
             # Check on x axis
             count = 0
-            mini_list = []
+            mini_list.clear
             for y in range(3):
                 for x in range(3):
                     if self.b[y][x] == mark:
@@ -99,6 +112,7 @@ class Arty:
                 return mini_list
             # check on y axis
             count = 0
+            mini_list.clear
             for y in range(3):
                 for x in range(3):
                     if self.b[x][y] == mark:
@@ -110,16 +124,18 @@ class Arty:
                 return mini_list
             # check diagonals front 
             count = 0
+            mini_list.clear
             for i in range(3):
                 if self.b[i][i] == mark:
                     count += 1
                 else: 
                     index = str(i) + str(i)
                     mini_list.append(index)
-            if count == 3:
+            if count > 1:
                 return mini_list
             # check diagonals rear
             count = 0
+            mini_list.clear
             for i in range(2, 0, -1):
                 if self.b[i][i] == mark:
                     count += 1
@@ -128,7 +144,6 @@ class Arty:
                     mini_list.append(index)
             if count > 1:
                 return mini_list
-
         return None
     
     def randMove(self):
@@ -146,9 +161,7 @@ class Arty:
         # 1. scan for potential wins and shut down/win where possible
         next_place = self.scanWins()
         if next_place is not None:
-            x = int(next_place[0])
-            y = int(next_place[1])
-            return x, y
+            return extract_key(next_place)
         else:
             return self.randMove()
 
@@ -175,6 +188,7 @@ class ticTacGame:
     def aiTurn(self):
         arty = Arty(self.gboard)
         artyx, artyy = arty.artyMove()
+        self.gboard.board[artyx][artyy] = 'X'
 
     def playGame(self):
         gameWon = False
