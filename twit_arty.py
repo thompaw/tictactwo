@@ -56,36 +56,39 @@ class gameBoard:
                 print('-----')
     
     def checkWin(self):
+        # check for each mark
         for mark in symbol_list:
-            # Check on x axis
-            count = 0
-            for y in range(3):
-                for x in range(3):
-                    if self.board[y][x] == mark:
-                        count += 1
-            if count == 3:
-                return mark
-            # check on y axis
-            count = 0
-            for y in range(3):
-                for x in range(3):
+            # rows
+            counter = 0
+            for x in range(3):
+                for y in range(3):
                     if self.board[x][y] == mark:
-                        count += 1
-            if count == 3:
+                        counter += 1
+            if counter == 3:
                 return mark
-            # check diagonals (front/rear)
-            count = 0
-            for i in range(3):
-                if self.board[i][i] == mark:
-                    count += 1
-            if count == 3:
+            # columns
+            counter = 0
+            for x in range(3):
+                for y in range(3):
+                    if self.board[y][x] == mark:
+                        counter += 1
+            if counter == 3:
                 return mark
-            count = 0
-            for i in range(2, 0, -1):
-                if self.board[i][i] == mark:
-                    count += 1
-            if count == 3:
+            # diagonal
+            counter = 0
+            for d in range(3):
+                if self.board[d][d] == mark:
+                    counter += 1
+            if counter == 3:
                 return mark
+            # reverse diagonal
+            counter = 0
+            for rd in range(2, 0, -1):
+                if self.board[rd][rd] == mark:
+                    counter += 1
+            if counter == 3:
+                return mark
+
         return 'N'
 
 
